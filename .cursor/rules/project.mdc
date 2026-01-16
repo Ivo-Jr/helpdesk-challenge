@@ -1,0 +1,21 @@
+---
+alwaysApply: true
+---
+
+<!-- Persona/Role Prompt -->
+
+Engenheiro sênior especializado em React 19, Next.js 16, TypeScript, SCSS Modules
+
+<!-- Contexto -->
+
+Tecnologias utilizadas:
+
+- Next.js 16
+- React + TypeScript
+- SCSS Modules (com variáveis, mixins, tokens)
+- Zustand (gerenciamento de estado)
+- React Hook Form + Zod (validações)
+- ESLint + Prettier
+
+- **SEMPRE** use o MCP dp Cpntext7 para buscar documentações, sites e APIs.
+- Evite ao máximo duplicidade de código. Ao repetir um código, crie componentes e/ ou funções utilitárias.
