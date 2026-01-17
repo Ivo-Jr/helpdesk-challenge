@@ -1,66 +1,75 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import type { Ticket } from "@/types/ticket";
+import styles from "./page.module.scss";
+import {
+  CATEGORY_LABELS,
+  PRIORITY_LABELS,
+  STATUS_LABELS,
+} from "./_lib/constants";
 
-export default function Home() {
+// ISR: Revalidar a cada 60 segundos
+export const revalidate = 60;
+
+// Função para buscar tickets do servidor
+async function getTickets(): Promise<Ticket[]> {
+  try {
+    const res = await fetch("http://localhost:3000/api/tickets", {
+      next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+      throw new Error("Falha ao buscar tickets");
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error("Erro ao buscar tickets:", error);
+    throw error;
+  }
+}
+
+// Helper para formatar data
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+}
+
+export default async function HomePage() {
+  const tickets = await getTickets();
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className={styles.container}>
+      <div className={styles.header}>
+        <h1>Tickets de Suporte</h1>
+        <p>Gerencie seus tickets de suporte</p>
+      </div>
+
+      {tickets.length === 0 ? (
+        <div className={styles.emptyState}>
+          <p>Nenhum ticket encontrado.</p>
+          <p>Crie seu primeiro ticket de suporte.</p>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      ) : (
+        <ul className={styles.ticketList}>
+          {tickets.map((ticket) => (
+            <li key={ticket.id} className={styles.ticketItem}>
+              <h3>{ticket.title}</h3>
+              <div className={styles.meta}>
+                <span>Status: {STATUS_LABELS[ticket.status]}</span>
+                <span>Prioridade: {PRIORITY_LABELS[ticket.priority]}</span>
+                <span>Categoria: {CATEGORY_LABELS[ticket.category]}</span>
+              </div>
+              <p>{ticket.description}</p>
+              <small>
+                {ticket.email} • {formatDate(ticket.createdAt)}
+              </small>
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
   );
 }
