@@ -35,8 +35,12 @@ export default async function HomePage() {
 
       {tickets.length === 0 ? (
         <div className={styles.emptyState}>
-          <p>Nenhum ticket encontrado.</p>
-          <p>Crie seu primeiro ticket de suporte.</p>
+          <div className={styles.emptyIcon}>📋</div>
+          <h2>Nenhum ticket encontrado</h2>
+          <p>Ainda não há tickets de suporte cadastrados.</p>
+          <p className={styles.emptyHint}>
+            Crie seu primeiro ticket para começar a gerenciar suas solicitações.
+          </p>
         </div>
       ) : (
         <ul className={styles.ticketList}>

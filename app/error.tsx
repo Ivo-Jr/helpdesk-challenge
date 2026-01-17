@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import styles from "./page.module.scss";
 
 export default function Error({
@@ -12,12 +13,24 @@ export default function Error({
   return (
     <main className={styles.container}>
       <div className={styles.header}>
-        <h1>Erro ao Carregar Tickets</h1>
-        <p>Ocorreu um erro ao buscar os tickets.</p>
+        <h1>Tickets de Suporte</h1>
+        <p>Algo deu errado</p>
       </div>
-      <div className={styles.emptyState}>
-        <p>{error.message}</p>
-        <button onClick={() => reset()}>Tentar novamente</button>
+
+      <div className={styles.errorState}>
+        <div className={styles.errorIcon}>⚠️</div>
+        <h2>Erro ao Carregar Tickets</h2>
+        <p className={styles.errorMessage}>
+          Não foi possível buscar os tickets. {error.message}
+        </p>
+        <div className={styles.errorActions}>
+          <button onClick={() => reset()} className={styles.primaryButton}>
+            Tentar Novamente
+          </button>
+          <Link href="/" className={styles.secondaryButton}>
+            Voltar ao Início
+          </Link>
+        </div>
       </div>
     </main>
   );

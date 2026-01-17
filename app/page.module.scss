@@ -36,12 +36,164 @@
   gap: $spacing-md;
 }
 
+// Skeleton Loading
+.skeleton {
+  border: 1px solid $color-border;
+  border-radius: $border-radius-md;
+  padding: $spacing-lg;
+  background: $color-bg-primary;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeletonTitle {
+  height: 24px;
+  width: 70%;
+  background: $color-bg-tertiary;
+  border-radius: $border-radius-sm;
+  margin-bottom: $spacing-sm;
+}
+
+.skeletonMeta {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-sm;
+}
+
+.skeletonBadge {
+  height: 20px;
+  width: 80px;
+  background: $color-bg-tertiary;
+  border-radius: $border-radius-sm;
+}
+
+.skeletonText {
+  height: 16px;
+  background: $color-bg-tertiary;
+  border-radius: $border-radius-sm;
+  margin-bottom: $spacing-xs;
+
+  &:last-of-type {
+    width: 60%;
+  }
+}
+
+.skeletonFooter {
+  height: 14px;
+  width: 40%;
+  background: $color-bg-tertiary;
+  border-radius: $border-radius-sm;
+  margin-top: $spacing-sm;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// Error State
+.errorState {
+  text-align: center;
+  padding: $spacing-3xl $spacing-lg;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.errorIcon {
+  font-size: 4rem;
+  margin-bottom: $spacing-lg;
+}
+
+.errorState h2 {
+  font-size: $text-2xl;
+  font-weight: $font-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.errorMessage {
+  color: $color-text-secondary;
+  font-size: $text-base;
+  margin-bottom: $spacing-xl;
+  line-height: 1.6;
+}
+
+.errorActions {
+  display: flex;
+  gap: $spacing-md;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  padding: $spacing-sm $spacing-lg;
+  background: $color-primary;
+  color: white;
+  border: none;
+  border-radius: $border-radius-md;
+  font-size: $text-base;
+  font-weight: $font-medium;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $color-primary-hover;
+  }
+}
+
+.secondaryButton {
+  padding: $spacing-sm $spacing-lg;
+  background: transparent;
+  color: $color-text-secondary;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-md;
+  font-size: $text-base;
+  font-weight: $font-medium;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $color-text-secondary;
+    color: $color-text-primary;
+  }
+}
+
+// Empty State (melhorado)
 .emptyState {
   text-align: center;
-  padding: $spacing-3xl;
-  color: $color-text-secondary;
+  padding: $spacing-3xl $spacing-lg;
+  max-width: 500px;
+  margin: 0 auto;
+
+  h2 {
+    font-size: $text-2xl;
+    font-weight: $font-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-sm;
+  }
 
   p {
+    color: $color-text-secondary;
+    font-size: $text-base;
     margin: $spacing-sm 0;
+    line-height: 1.6;
   }
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: $spacing-lg;
+  opacity: 0.5;
+}
+
+.emptyHint {
+  font-size: $text-sm !important;
+  color: $color-text-tertiary !important;
+  margin-top: $spacing-md !important;
 }
