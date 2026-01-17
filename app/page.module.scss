@@ -36,39 +36,6 @@
   gap: $spacing-md;
 }
 
-.ticketItem {
-  border: 1px solid $color-border;
-  border-radius: $border-radius-md;
-  padding: $spacing-lg;
-  background: $color-bg-primary;
-
-  h3 {
-    font-size: $text-lg;
-    font-weight: $font-semibold;
-    margin-bottom: $spacing-sm;
-    color: $color-text-primary;
-  }
-
-  .meta {
-    display: flex;
-    gap: $spacing-md;
-    margin-bottom: $spacing-sm;
-    font-size: $text-sm;
-    color: $color-text-secondary;
-  }
-
-  p {
-    color: $color-text-secondary;
-    margin: $spacing-sm 0;
-    font-size: $text-sm;
-  }
-
-  small {
-    font-size: $text-xs;
-    color: $color-text-tertiary;
-  }
-}
-
 .emptyState {
   text-align: center;
   padding: $spacing-3xl;

@@ -1,10 +1,6 @@
 import type { Ticket } from "@/types/ticket";
 import styles from "./page.module.scss";
-import {
-  CATEGORY_LABELS,
-  PRIORITY_LABELS,
-  STATUS_LABELS,
-} from "./_lib/constants";
+import { TicketCard } from "@/components/ticket-card/TicketCard";
 
 // ISR: Revalidar a cada 60 segundos
 export const revalidate = 60;
@@ -27,16 +23,6 @@ async function getTickets(): Promise<Ticket[]> {
   }
 }
 
-// Helper para formatar data
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(date);
-}
-
 export default async function HomePage() {
   const tickets = await getTickets();
 
@@ -55,17 +41,8 @@ export default async function HomePage() {
       ) : (
         <ul className={styles.ticketList}>
           {tickets.map((ticket) => (
-            <li key={ticket.id} className={styles.ticketItem}>
-              <h3>{ticket.title}</h3>
-              <div className={styles.meta}>
-                <span>Status: {STATUS_LABELS[ticket.status]}</span>
-                <span>Prioridade: {PRIORITY_LABELS[ticket.priority]}</span>
-                <span>Categoria: {CATEGORY_LABELS[ticket.category]}</span>
-              </div>
-              <p>{ticket.description}</p>
-              <small>
-                {ticket.email} • {formatDate(ticket.createdAt)}
-              </small>
+            <li key={ticket.id}>
+              <TicketCard ticket={ticket} />
             </li>
           ))}
         </ul>
