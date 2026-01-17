@@ -2,8 +2,7 @@
 
 ## Objetivo
 
-Definir o layout base da aplicação de Helpdesk (CRUD de Tickets) sem uso de Figma,
-priorizando clareza, boas práticas de UX e padrões visuais de produtos SaaS modernos.
+Definir o layout base da aplicação de Helpdesk (CRUD de Tickets) sem uso de Figma, priorizando clareza, boas práticas de UX e padrões visuais de produtos SaaS modernos.
 
 O layout serviria como base conceitual para:
 
@@ -16,9 +15,7 @@ O layout serviria como base conceitual para:
 
 ## Prompt Utilizado
 
-Foi solicitado à IA que definisse a estrutura de layout e UX da aplicação com base
-em princípios claros, sem foco em pixel-perfect, inspirado em produtos SaaS reais
-como Linear, Zendesk e Notion.
+Foi solicitado à IA que definisse a estrutura de layout e UX da aplicação com base em princípios claros, sem foco em pixel-perfect, inspirado em produtos SaaS reais como Linear, Zendesk e Notion.
 
 Diretrizes principais:
 
@@ -55,8 +52,7 @@ A IA retornou um planejamento completo de layout e UX contendo:
   - breakpoints
 - Componentes visuais base (Button, Badge, Card, Modal, Toast)
 
-O material retornado funcionou como um “Figma textual”, permitindo visualizar
-o produto final antes da implementação em código.
+O material retornado funcionou como um “Figma textual”, permitindo visualizar o produto final antes da implementação em código.
 
 ---
 

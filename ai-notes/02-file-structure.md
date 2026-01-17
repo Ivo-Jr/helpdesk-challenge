@@ -14,10 +14,8 @@ Definir uma estrutura de pastas clara e escalável para o challenge.
 - Padronização de rotas em inglês
 - Simplificação de componentes não essenciais
 - Redução de abstrações iniciais para evitar overengineering
-- Algumas pastas sugeridas inicialmente foram criadas apenas quando houve necessidade,
-  evitando pastas vazias e overengineering.
+- Algumas pastas sugeridas inicialmente foram criadas apenas quando houve necessidade, evitando pastas vazias e overengineering.
 
 ## Decisão arquitetural
 
-Optei por uma estrutura organizada, porém pragmática,
-adequada ao escopo de um challenge técnico.
+Optei por uma estrutura organizada, porém pragmática, adequada ao escopo de um challenge técnico.

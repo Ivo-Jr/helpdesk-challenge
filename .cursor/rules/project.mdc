@@ -20,3 +20,4 @@ Tecnologias utilizadas:
 - **SEMPRE** use o MCP dp Cpntext7 para buscar documentações, sites e APIs.
 - Evite ao máximo duplicidade de código. Ao repetir um código, crie componentes e/ ou funções utilitárias.
 - **SEMPRE** crie pastas e arquivos de forma incremental, evitando pastas vazias e abstrações prematuras.
+- **SEMPRE** dê uma breve justificativa das declarações.

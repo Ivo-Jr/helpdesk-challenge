@@ -2,9 +2,7 @@
 
 ## Objetivo
 
-Planejar e estruturar o desenvolvimento de uma aplicação de Helpdesk (CRUD de Tickets),
-avaliando domínio técnico em Next.js (App Router), React, TypeScript, organização de código,
-UX, acessibilidade e boas práticas de frontend moderno.
+Planejar e estruturar o desenvolvimento de uma aplicação de Helpdesk (CRUD de Tickets), avaliando domínio técnico em Next.js (App Router), React, TypeScript, organização de código, UX, acessibilidade e boas práticas de frontend moderno.
 
 ## Contexto fornecido à IA
 
@@ -58,5 +56,4 @@ O desenvolvimento seguirá as seguintes fases:
 
 ## Observação crítica
 
-O foco não é quantidade de features, mas clareza, organização, decisões técnicas coerentes
-e aderência ao que seria esperado em um produto real.
+O foco não é quantidade de features, mas clareza, organização, decisões técnicas coerentes e aderência ao que seria esperado em um produto real.
