@@ -1,0 +1,35 @@
+@import "./variables";
+
+// Design Tokens
+// Este arquivo centraliza os tokens de design que podem ser usados em toda a aplicação
+
+// Typography Scale
+:export {
+  textXs: $text-xs;
+  textSm: $text-sm;
+  textBase: $text-base;
+  textLg: $text-lg;
+  textXl: $text-xl;
+  text2xl: $text-2xl;
+  text3xl: $text-3xl;
+}
+
+// Spacing Scale
+:export {
+  spacingXs: $spacing-xs;
+  spacingSm: $spacing-sm;
+  spacingMd: $spacing-md;
+  spacingLg: $spacing-lg;
+  spacingXl: $spacing-xl;
+  spacing2xl: $spacing-2xl;
+  spacing3xl: $spacing-3xl;
+}
+
+// Color Palette
+:export {
+  colorPrimary: $color-primary;
+  colorSuccess: $color-success;
+  colorError: $color-error;
+  colorWarning: $color-warning;
+  colorInfo: $color-info;
+}
