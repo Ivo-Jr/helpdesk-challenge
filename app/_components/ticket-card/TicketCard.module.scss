@@ -1,10 +1,28 @@
 @import "../../_styles/variables";
 
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:hover .card {
+    border-color: $color-primary;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
 .card {
   border: 1px solid $color-border;
   border-radius: $border-radius-md;
   padding: $spacing-lg;
   background: $color-bg-primary;
+  transition: all 0.2s;
+  cursor: pointer;
 }
 
 .title {

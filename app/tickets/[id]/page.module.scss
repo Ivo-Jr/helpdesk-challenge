@@ -1,0 +1,234 @@
+@import "../../_styles/variables";
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: $spacing-xl $spacing-lg;
+  background-color: $color-bg-primary;
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: $spacing-xl;
+}
+
+.backLink {
+  display: inline-block;
+  color: $color-text-secondary;
+  text-decoration: none;
+  font-size: $text-sm;
+  margin-bottom: $spacing-md;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.title {
+  font-size: $text-3xl;
+  font-weight: $font-bold;
+  color: $color-text-primary;
+  margin: 0;
+}
+
+.content {
+  background: $color-bg-secondary;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-md;
+  padding: $spacing-xl;
+}
+
+// Badges
+.badges {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+  margin-bottom: $spacing-xl;
+}
+
+.badge {
+  padding: $spacing-xs $spacing-md;
+  border-radius: $border-radius-sm;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  display: inline-block;
+}
+
+// Status badges
+.badge-open {
+  background: $color-bg-open;
+  color: $color-text-status-open;
+  border: 1px solid $color-status-open;
+}
+
+.badge-in_progress {
+  background: $color-bg-in-progress;
+  color: $color-text-status-in-progress;
+  border: 1px solid $color-status-in-progress;
+}
+
+.badge-resolved {
+  background: $color-bg-resolved;
+  color: $color-text-status-resolved;
+  border: 1px solid $color-status-resolved;
+}
+
+// Priority badges
+.badge-priority-low {
+  background: $color-bg-low;
+  color: $color-text-priority-low;
+  border: 1px solid $color-priority-low;
+}
+
+.badge-priority-medium {
+  background: $color-bg-medium;
+  color: $color-text-priority-medium;
+  border: 1px solid $color-priority-medium;
+}
+
+.badge-priority-high {
+  background: $color-bg-high;
+  color: $color-text-priority-high;
+  border: 1px solid $color-priority-high;
+}
+
+// Category badge
+.badgeCategory {
+  background: $color-bg-category;
+  color: $color-category-dark;
+  border: 1px solid $color-category;
+}
+
+// Sections
+.section {
+  margin-bottom: $spacing-xl;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  h2 {
+    font-size: $text-lg;
+    font-weight: $font-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+    padding-bottom: $spacing-sm;
+    border-bottom: 1px solid $color-border;
+  }
+}
+
+.description {
+  color: $color-text-secondary;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+// Info list
+.infoList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.infoItem {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: $spacing-md;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: $spacing-xs;
+  }
+
+  dt {
+    font-weight: $font-medium;
+    color: $color-text-secondary;
+    font-size: $text-sm;
+  }
+
+  dd {
+    color: $color-text-primary;
+    margin: 0;
+  }
+}
+
+.attachmentLink {
+  color: $color-primary;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $color-primary-hover;
+    text-decoration: underline;
+  }
+}
+
+// Actions
+.actions {
+  display: flex;
+  gap: $spacing-md;
+  padding-top: $spacing-xl;
+  border-top: 1px solid $color-border;
+  margin-top: $spacing-xl;
+}
+
+.editButton {
+  padding: $spacing-sm $spacing-lg;
+  background: $color-primary;
+  color: white;
+  border: none;
+  border-radius: $border-radius-sm;
+  font-size: $text-base;
+  font-weight: $font-medium;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-block;
+
+  &:hover {
+    background: $color-primary-hover;
+  }
+}
+
+// Not found
+.notFound {
+  text-align: center;
+  padding: $spacing-3xl $spacing-lg;
+  max-width: 500px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: $text-2xl;
+    font-weight: $font-bold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+
+  p {
+    color: $color-text-secondary;
+    margin-bottom: $spacing-xl;
+  }
+}
+
+.notFoundIcon {
+  font-size: 4rem;
+  margin-bottom: $spacing-lg;
+  opacity: 0.5;
+}
+
+.backButton {
+  padding: $spacing-sm $spacing-lg;
+  background: $color-primary;
+  color: white;
+  border-radius: $border-radius-sm;
+  text-decoration: none;
+  font-weight: $font-medium;
+  display: inline-block;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $color-primary-hover;
+  }
+}
+

@@ -35,6 +35,20 @@ $color-bg-low: #f4f4f5;
 $color-bg-medium: #fef3c7;
 $color-bg-high: #fee2e2;
 
+// Cores de texto para badges (versões mais escuras)
+$color-text-status-open: #1d4ed8;
+$color-text-status-in-progress: #b45309;
+$color-text-status-resolved: #15803d;
+
+$color-text-priority-low: #374151;
+$color-text-priority-medium: #b45309;
+$color-text-priority-high: #b91c1c;
+
+// Cores para categoria (purple)
+$color-category: #8b5cf6;
+$color-category-dark: #5b21b6;
+$color-bg-category: rgba(139, 92, 246, 0.1);
+
 // Font Family
 $font-family:
   -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
