@@ -11,6 +11,7 @@ interface TicketFormProps {
   onSubmit: (data: CreateTicketDto) => Promise<void>;
   isSubmitting: boolean;
   error: string | null;
+  success?: boolean;
   onCancel: () => void;
 }
 
@@ -18,6 +19,7 @@ export function TicketForm({
   onSubmit,
   isSubmitting,
   error,
+  success,
   onCancel,
 }: TicketFormProps) {
   const {
@@ -43,7 +45,19 @@ export function TicketForm({
 
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className={styles.form}>
-      {error && <div className={styles.error}>{error}</div>}
+      {error && (
+        <div className={styles.error}>
+          <span className={styles.errorIcon}>⚠️</span>
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div className={styles.success}>
+          <span className={styles.successIcon}>✓</span>
+          Ticket criado com sucesso! Redirecionando...
+        </div>
+      )}
 
       <div className={styles.field}>
         <label htmlFor="title">Título *</label>
@@ -153,7 +167,14 @@ export function TicketForm({
           disabled={isSubmitting}
           className={styles.submitButton}
         >
-          {isSubmitting ? "Criando..." : "Criar Ticket"}
+          {isSubmitting ? (
+            <>
+              <span className={styles.spinner}></span>
+              Criando...
+            </>
+          ) : (
+            "Criar Ticket"
+          )}
         </button>
       </div>
     </form>

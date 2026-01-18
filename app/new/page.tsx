@@ -11,14 +11,21 @@ export default function NewTicketPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (data: CreateTicketDto) => {
     setError(null);
+    setSuccess(false);
     setIsSubmitting(true);
 
     try {
       await ticketApi.create(data);
-      router.push("/");
+      setSuccess(true);
+      
+      // Aguardar 1.5s para mostrar mensagem de sucesso antes de redirecionar
+      setTimeout(() => {
+        router.push("/");
+      }, 1500);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao criar ticket");
       setIsSubmitting(false);
@@ -40,6 +47,7 @@ export default function NewTicketPage() {
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
         error={error}
+        success={success}
         onCancel={handleCancel}
       />
     </main>
