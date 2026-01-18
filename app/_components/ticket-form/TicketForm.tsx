@@ -1,7 +1,9 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { CreateTicketDto } from "@/types/ticket";
+import { ticketSchema } from "@/lib/validations";
 import { PRIORITY_LABELS, CATEGORY_LABELS } from "@/lib/constants";
 import styles from "./TicketForm.module.scss";
 
@@ -23,6 +25,7 @@ export function TicketForm({
     handleSubmit,
     formState: { errors },
   } = useForm<CreateTicketDto>({
+    resolver: zodResolver(ticketSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -35,12 +38,7 @@ export function TicketForm({
   });
 
   const onFormSubmit = async (data: CreateTicketDto) => {
-    // Remove attachmentUrl vazio
-    const payload = {
-      ...data,
-      attachmentUrl: data.attachmentUrl || undefined,
-    };
-    await onSubmit(payload);
+    await onSubmit(data);
   };
 
   return (
@@ -52,19 +50,27 @@ export function TicketForm({
         <input
           id="title"
           type="text"
-          {...register("title", { required: true })}
+          {...register("title")}
           disabled={isSubmitting}
+          className={errors.title ? styles.inputError : ""}
         />
+        {errors.title && (
+          <span className={styles.fieldError}>{errors.title.message}</span>
+        )}
       </div>
 
       <div className={styles.field}>
         <label htmlFor="description">Descrição *</label>
         <textarea
           id="description"
-          {...register("description", { required: true })}
+          {...register("description")}
           rows={5}
           disabled={isSubmitting}
+          className={errors.description ? styles.inputError : ""}
         />
+        {errors.description && (
+          <span className={styles.fieldError}>{errors.description.message}</span>
+        )}
       </div>
 
       <div className={styles.field}>
@@ -72,9 +78,13 @@ export function TicketForm({
         <input
           id="email"
           type="email"
-          {...register("email", { required: true })}
+          {...register("email")}
           disabled={isSubmitting}
+          className={errors.email ? styles.inputError : ""}
         />
+        {errors.email && (
+          <span className={styles.fieldError}>{errors.email.message}</span>
+        )}
       </div>
 
       <div className={styles.row}>
@@ -82,27 +92,35 @@ export function TicketForm({
           <label htmlFor="priority">Prioridade *</label>
           <select
             id="priority"
-            {...register("priority", { required: true })}
+            {...register("priority")}
             disabled={isSubmitting}
+            className={errors.priority ? styles.inputError : ""}
           >
             <option value="low">{PRIORITY_LABELS.low}</option>
             <option value="medium">{PRIORITY_LABELS.medium}</option>
             <option value="high">{PRIORITY_LABELS.high}</option>
           </select>
+          {errors.priority && (
+            <span className={styles.fieldError}>{errors.priority.message}</span>
+          )}
         </div>
 
         <div className={styles.field}>
           <label htmlFor="category">Categoria *</label>
           <select
             id="category"
-            {...register("category", { required: true })}
+            {...register("category")}
             disabled={isSubmitting}
+            className={errors.category ? styles.inputError : ""}
           >
             <option value="bug">{CATEGORY_LABELS.bug}</option>
             <option value="billing">{CATEGORY_LABELS.billing}</option>
             <option value="feature">{CATEGORY_LABELS.feature}</option>
             <option value="other">{CATEGORY_LABELS.other}</option>
           </select>
+          {errors.category && (
+            <span className={styles.fieldError}>{errors.category.message}</span>
+          )}
         </div>
       </div>
 
@@ -114,7 +132,11 @@ export function TicketForm({
           {...register("attachmentUrl")}
           placeholder="https://exemplo.com/arquivo.pdf"
           disabled={isSubmitting}
+          className={errors.attachmentUrl ? styles.inputError : ""}
         />
+        {errors.attachmentUrl && (
+          <span className={styles.fieldError}>{errors.attachmentUrl.message}</span>
+        )}
       </div>
 
       <div className={styles.actions}>
@@ -137,4 +159,3 @@ export function TicketForm({
     </form>
   );
 }
-

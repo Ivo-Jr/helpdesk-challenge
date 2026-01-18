@@ -118,3 +118,17 @@
   }
 }
 
+.inputError {
+  border-color: $color-error !important;
+  
+  &:focus {
+    border-color: $color-error !important;
+  }
+}
+
+.fieldError {
+  font-size: $text-xs;
+  color: $color-error;
+  margin-top: $spacing-xs;
+  display: block;
+}

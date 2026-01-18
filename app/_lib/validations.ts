@@ -24,8 +24,7 @@ export const ticketSchema = z
         z.literal("open"),
         z.literal("in_progress"),
         z.literal("resolved"),
-      ])
-      .default("open"),
+      ]),
     attachmentUrl: z
       .string()
       .url("URL inválida")
