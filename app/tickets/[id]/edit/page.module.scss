@@ -1,0 +1,27 @@
+@import "../../../_styles/variables";
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: $spacing-xl $spacing-lg;
+  background-color: $color-bg-primary;
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: $spacing-xl;
+  
+  h1 {
+    font-size: $text-3xl;
+    font-weight: $font-bold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-sm 0;
+  }
+
+  p {
+    color: $color-text-secondary;
+    font-size: $text-base;
+    margin: 0;
+  }
+}
+

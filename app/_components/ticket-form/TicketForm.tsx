@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { CreateTicketDto } from "@/types/ticket";
+import type { CreateTicketDto, Ticket } from "@/types/ticket";
 import { ticketSchema } from "@/lib/validations";
 import { PRIORITY_LABELS, CATEGORY_LABELS } from "@/lib/constants";
 import styles from "./TicketForm.module.scss";
@@ -13,6 +13,8 @@ interface TicketFormProps {
   error: string | null;
   success?: boolean;
   onCancel: () => void;
+  initialValues?: Ticket;
+  mode?: "create" | "edit";
 }
 
 export function TicketForm({
@@ -21,6 +23,8 @@ export function TicketForm({
   error,
   success,
   onCancel,
+  initialValues,
+  mode = "create",
 }: TicketFormProps) {
   const {
     register,
@@ -28,7 +32,7 @@ export function TicketForm({
     formState: { errors },
   } = useForm<CreateTicketDto>({
     resolver: zodResolver(ticketSchema),
-    defaultValues: {
+    defaultValues: initialValues || {
       title: "",
       description: "",
       email: "",
@@ -55,7 +59,9 @@ export function TicketForm({
       {success && (
         <div className={styles.success}>
           <span className={styles.successIcon}>✓</span>
-          Ticket criado com sucesso! Redirecionando...
+          {mode === "edit" 
+            ? "Ticket atualizado com sucesso! Redirecionando..." 
+            : "Ticket criado com sucesso! Redirecionando..."}
         </div>
       )}
 
@@ -170,10 +176,10 @@ export function TicketForm({
           {isSubmitting ? (
             <>
               <span className={styles.spinner}></span>
-              Criando...
+              {mode === "edit" ? "Salvando..." : "Criando..."}
             </>
           ) : (
-            "Criar Ticket"
+            mode === "edit" ? "Salvar Alterações" : "Criar Ticket"
           )}
         </button>
       </div>
