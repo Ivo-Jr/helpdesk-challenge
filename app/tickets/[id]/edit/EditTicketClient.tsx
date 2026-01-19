@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Ticket, CreateTicketDto } from "@/types/ticket";
 import { TicketForm } from "@/components/ticket-form/TicketForm";
+import { ticketApi } from "@/lib/api";
 import styles from "./page.module.scss";
 
 interface EditTicketClientProps {
@@ -12,13 +13,26 @@ interface EditTicketClientProps {
 
 export function EditTicketClient({ ticket }: EditTicketClientProps) {
   const router = useRouter();
-  const [isSubmitting] = useState(false);
-  const [error] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
-  // Placeholder: submit será implementado depois
   const handleSubmit = async (data: CreateTicketDto) => {
-    console.log("Submit será implementado na próxima etapa:", data);
-    // TODO: Implementar ticketApi.update()
+    setError(null);
+    setSuccess(false);
+    setIsSubmitting(true);
+
+    try {
+      await ticketApi.update(ticket.id, data);
+      setSuccess(true);
+      
+      setTimeout(() => {
+        router.push(`/tickets/${ticket.id}`);
+      }, 1500);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao atualizar ticket");
+      setIsSubmitting(false);
+    }
   };
 
   const handleCancel = () => {
@@ -36,6 +50,7 @@ export function EditTicketClient({ ticket }: EditTicketClientProps) {
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
         error={error}
+        success={success}
         onCancel={handleCancel}
         initialValues={ticket}
         mode="edit"
