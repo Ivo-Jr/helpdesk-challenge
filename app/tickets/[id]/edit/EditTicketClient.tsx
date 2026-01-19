@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTicketStore } from "@/stores/ticket-store";
+import { useTicketMutation } from "@/hooks/use-ticket-mutation";
 import type { Ticket, CreateTicketDto } from "@/types/ticket";
 import { TicketForm } from "@/components/ticket-form/TicketForm";
-import { ticketApi } from "@/lib/api";
 import styles from "./page.module.scss";
 
 interface EditTicketClientProps {
@@ -13,26 +13,13 @@ interface EditTicketClientProps {
 
 export function EditTicketClient({ ticket }: EditTicketClientProps) {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const updateTicketAsync = useTicketStore((state) => state.updateTicketAsync);
+  const { mutate, isLoading, error, isSuccess } = useTicketMutation({
+    onSuccess: () => router.push(`/tickets/${ticket.id}`),
+  });
 
   const handleSubmit = async (data: CreateTicketDto) => {
-    setError(null);
-    setSuccess(false);
-    setIsSubmitting(true);
-
-    try {
-      await ticketApi.update(ticket.id, data);
-      setSuccess(true);
-      
-      setTimeout(() => {
-        router.push(`/tickets/${ticket.id}`);
-      }, 1500);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao atualizar ticket");
-      setIsSubmitting(false);
-    }
+    mutate(() => updateTicketAsync(ticket.id, data));
   };
 
   const handleCancel = () => {
@@ -48,9 +35,9 @@ export function EditTicketClient({ ticket }: EditTicketClientProps) {
 
       <TicketForm
         onSubmit={handleSubmit}
-        isSubmitting={isSubmitting}
+        isSubmitting={isLoading}
         error={error}
-        success={success}
+        success={isSuccess}
         onCancel={handleCancel}
         initialValues={ticket}
         mode="edit"
