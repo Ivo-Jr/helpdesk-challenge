@@ -3,6 +3,30 @@ import { ticketApi } from '../api';
 import type { Ticket, CreateTicketDto, UpdateTicketDto } from '../../_types/ticket';
 import * as config from '../config';
 
+// Helper para criar mock de Response completo
+function createMockResponse(body: unknown, options: { ok?: boolean; status?: number } = {}): Response {
+  const { ok = true, status = ok ? 200 : 400 } = options;
+  
+  return {
+    ok,
+    status,
+    statusText: ok ? 'OK' : 'Error',
+    headers: new Headers(),
+    redirected: false,
+    type: 'basic',
+    url: '',
+    body: null,
+    bodyUsed: false,
+    clone: vi.fn(),
+    arrayBuffer: vi.fn(),
+    blob: vi.fn(),
+    formData: vi.fn(),
+    text: vi.fn(),
+    bytes: vi.fn(),
+    json: async () => body,
+  } as unknown as Response;
+}
+
 describe('ticketApi', () => {
   // Mock de fetch
   let fetchSpy: ReturnType<typeof vi.spyOn>;
@@ -34,10 +58,7 @@ describe('ticketApi', () => {
   describe('getAll', () => {
     it('deve buscar todos os tickets sem filtros', async () => {
       const mockTickets: Ticket[] = [mockTicket];
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTickets,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTickets));
 
       const result = await ticketApi.getAll();
 
@@ -51,10 +72,7 @@ describe('ticketApi', () => {
 
     it('deve buscar tickets com filtro de status', async () => {
       const mockTickets: Ticket[] = [mockTicket];
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTickets,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTickets));
 
       const result = await ticketApi.getAll({ status: 'open' });
 
@@ -67,10 +85,7 @@ describe('ticketApi', () => {
 
     it('deve buscar tickets com filtro de search', async () => {
       const mockTickets: Ticket[] = [mockTicket];
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTickets,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTickets));
 
       const result = await ticketApi.getAll({ search: 'bug' });
 
@@ -83,10 +98,7 @@ describe('ticketApi', () => {
 
     it('deve buscar tickets com múltiplos filtros', async () => {
       const mockTickets: Ticket[] = [mockTicket];
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTickets,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTickets));
 
       const result = await ticketApi.getAll({
         status: 'open',
@@ -105,10 +117,7 @@ describe('ticketApi', () => {
 
     it('deve usar URL absoluta quando useAbsolute=true', async () => {
       const mockTickets: Ticket[] = [mockTicket];
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTickets,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTickets));
 
       await ticketApi.getAll(undefined, { useAbsolute: true });
 
@@ -123,10 +132,7 @@ describe('ticketApi', () => {
 
     it('deve usar opções de cache customizadas', async () => {
       const mockTickets: Ticket[] = [mockTicket];
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTickets,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTickets));
 
       await ticketApi.getAll(undefined, {
         cache: 'force-cache',
@@ -140,10 +146,7 @@ describe('ticketApi', () => {
     });
 
     it('deve retornar array vazio quando API retorna vazio', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => [],
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse([]));
 
       const result = await ticketApi.getAll();
 
@@ -151,21 +154,19 @@ describe('ticketApi', () => {
     });
 
     it('deve lançar erro quando response não é ok', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({ error: 'Erro ao buscar tickets' }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ error: 'Erro ao buscar tickets' }, { ok: false })
+      );
 
       await expect(ticketApi.getAll()).rejects.toThrow('Erro ao buscar tickets');
     });
 
     it('deve lançar erro genérico quando json() falha', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        json: async () => {
-          throw new Error('Invalid JSON');
-        },
-      } as Response);
+      const mockResponse = createMockResponse(null, { ok: false });
+      mockResponse.json = async () => {
+        throw new Error('Invalid JSON');
+      };
+      fetchSpy.mockResolvedValueOnce(mockResponse);
 
       await expect(ticketApi.getAll()).rejects.toThrow('Erro desconhecido');
     });
@@ -173,10 +174,7 @@ describe('ticketApi', () => {
 
   describe('getById', () => {
     it('deve buscar ticket por ID', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTicket,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTicket));
 
       const result = await ticketApi.getById('ticket-123');
 
@@ -189,10 +187,7 @@ describe('ticketApi', () => {
     });
 
     it('deve usar URL absoluta quando useAbsolute=true', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTicket,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTicket));
 
       await ticketApi.getById('ticket-123', { useAbsolute: true });
 
@@ -206,10 +201,7 @@ describe('ticketApi', () => {
     });
 
     it('deve usar opções de cache customizadas', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTicket,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTicket));
 
       await ticketApi.getById('ticket-123', {
         cache: 'force-cache',
@@ -223,11 +215,9 @@ describe('ticketApi', () => {
     });
 
     it('deve lançar erro quando ticket não existe (404)', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        status: 404,
-        json: async () => ({ error: 'Ticket não encontrado' }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ error: 'Ticket não encontrado' }, { ok: false, status: 404 })
+      );
 
       await expect(ticketApi.getById('invalid-id')).rejects.toThrow(
         'Ticket não encontrado'
@@ -235,13 +225,11 @@ describe('ticketApi', () => {
     });
 
     it('deve lançar erro genérico em caso de erro do servidor', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-        json: async () => {
-          throw new Error('Server error');
-        },
-      } as Response);
+      const mockResponse = createMockResponse(null, { ok: false, status: 500 });
+      mockResponse.json = async () => {
+        throw new Error('Server error');
+      };
+      fetchSpy.mockResolvedValueOnce(mockResponse);
 
       await expect(ticketApi.getById('ticket-123')).rejects.toThrow(
         'Erro desconhecido'
@@ -260,10 +248,7 @@ describe('ticketApi', () => {
     };
 
     it('deve criar um novo ticket', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTicket,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTicket));
 
       const result = await ticketApi.create(createDto);
 
@@ -277,10 +262,7 @@ describe('ticketApi', () => {
     });
 
     it('deve enviar dados corretos no body', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTicket,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTicket));
 
       await ticketApi.create(createDto);
 
@@ -293,10 +275,7 @@ describe('ticketApi', () => {
     });
 
     it('deve incluir header Content-Type correto', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTicket,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTicket));
 
       await ticketApi.create(createDto);
 
@@ -307,11 +286,9 @@ describe('ticketApi', () => {
     });
 
     it('deve lançar erro quando validação falha (400)', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        status: 400,
-        json: async () => ({ error: 'Dados inválidos' }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ error: 'Dados inválidos' }, { ok: false, status: 400 })
+      );
 
       await expect(ticketApi.create(createDto)).rejects.toThrow(
         'Dados inválidos'
@@ -319,11 +296,9 @@ describe('ticketApi', () => {
     });
 
     it('deve lançar erro quando servidor falha (500)', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-        json: async () => ({ error: 'Erro ao criar ticket' }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ error: 'Erro ao criar ticket' }, { ok: false, status: 500 })
+      );
 
       await expect(ticketApi.create(createDto)).rejects.toThrow(
         'Erro ao criar ticket'
@@ -336,10 +311,7 @@ describe('ticketApi', () => {
         attachmentUrl: 'https://example.com/file.pdf',
       };
 
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTicket,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTicket));
 
       await ticketApi.create(dtoWithAttachment);
 
@@ -357,10 +329,7 @@ describe('ticketApi', () => {
 
     it('deve atualizar um ticket existente', async () => {
       const updatedTicket = { ...mockTicket, ...updateDto };
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => updatedTicket,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(updatedTicket));
 
       const result = await ticketApi.update('ticket-123', updateDto);
 
@@ -375,10 +344,9 @@ describe('ticketApi', () => {
 
     it('deve permitir atualização parcial', async () => {
       const partialUpdate: UpdateTicketDto = { status: 'in_progress' };
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ ...mockTicket, status: 'in_progress' }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ ...mockTicket, status: 'in_progress' })
+      );
 
       await ticketApi.update('ticket-123', partialUpdate);
 
@@ -389,10 +357,7 @@ describe('ticketApi', () => {
     });
 
     it('deve usar método PATCH', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTicket,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTicket));
 
       await ticketApi.update('ticket-123', updateDto);
 
@@ -401,11 +366,9 @@ describe('ticketApi', () => {
     });
 
     it('deve lançar erro quando ticket não existe (404)', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        status: 404,
-        json: async () => ({ error: 'Ticket não encontrado' }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ error: 'Ticket não encontrado' }, { ok: false, status: 404 })
+      );
 
       await expect(ticketApi.update('invalid-id', updateDto)).rejects.toThrow(
         'Ticket não encontrado'
@@ -413,11 +376,9 @@ describe('ticketApi', () => {
     });
 
     it('deve lançar erro quando validação falha', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        status: 400,
-        json: async () => ({ error: 'Dados inválidos' }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ error: 'Dados inválidos' }, { ok: false, status: 400 })
+      );
 
       await expect(ticketApi.update('ticket-123', updateDto)).rejects.toThrow(
         'Dados inválidos'
@@ -425,10 +386,7 @@ describe('ticketApi', () => {
     });
 
     it('deve incluir Content-Type header', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockTicket,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(mockTicket));
 
       await ticketApi.update('ticket-123', updateDto);
 
@@ -441,9 +399,7 @@ describe('ticketApi', () => {
 
   describe('delete', () => {
     it('deve deletar um ticket existente', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(null));
 
       await ticketApi.delete('ticket-123');
 
@@ -454,9 +410,7 @@ describe('ticketApi', () => {
     });
 
     it('deve usar método DELETE', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(null));
 
       await ticketApi.delete('ticket-123');
 
@@ -465,9 +419,7 @@ describe('ticketApi', () => {
     });
 
     it('não deve retornar nada em caso de sucesso', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(createMockResponse(null));
 
       const result = await ticketApi.delete('ticket-123');
 
@@ -475,11 +427,9 @@ describe('ticketApi', () => {
     });
 
     it('deve lançar erro quando ticket não existe (404)', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        status: 404,
-        json: async () => ({ error: 'Ticket não encontrado' }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ error: 'Ticket não encontrado' }, { ok: false, status: 404 })
+      );
 
       await expect(ticketApi.delete('invalid-id')).rejects.toThrow(
         'Ticket não encontrado'
@@ -487,13 +437,11 @@ describe('ticketApi', () => {
     });
 
     it('deve lançar erro genérico quando json() falha', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-        json: async () => {
-          throw new Error('Parse error');
-        },
-      } as Response);
+      const mockResponse = createMockResponse(null, { ok: false, status: 500 });
+      mockResponse.json = async () => {
+        throw new Error('Parse error');
+      };
+      fetchSpy.mockResolvedValueOnce(mockResponse);
 
       await expect(ticketApi.delete('ticket-123')).rejects.toThrow(
         'Erro ao excluir ticket'
@@ -501,11 +449,9 @@ describe('ticketApi', () => {
     });
 
     it('deve lançar erro com mensagem específica', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        status: 403,
-        json: async () => ({ error: 'Sem permissão para excluir' }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ error: 'Sem permissão para excluir' }, { ok: false, status: 403 })
+      );
 
       await expect(ticketApi.delete('ticket-123')).rejects.toThrow(
         'Sem permissão para excluir'
@@ -529,31 +475,28 @@ describe('ticketApi', () => {
     });
 
     it('deve tratar JSON inválido na resposta de sucesso', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: true,
-        json: async () => {
-          throw new Error('Invalid JSON');
-        },
-      } as Response);
+      const mockResponse = createMockResponse(null);
+      mockResponse.json = async () => {
+        throw new Error('Invalid JSON');
+      };
+      fetchSpy.mockResolvedValueOnce(mockResponse);
 
       await expect(ticketApi.getAll()).rejects.toThrow('Invalid JSON');
     });
 
     it('deve preservar mensagem de erro da API', async () => {
       const customError = 'Erro personalizado da API';
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({ error: customError }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ error: customError }, { ok: false })
+      );
 
       await expect(ticketApi.getAll()).rejects.toThrow(customError);
     });
 
     it('deve usar mensagem padrão quando API não retorna error field', async () => {
-      fetchSpy.mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({ message: 'Something went wrong' }),
-      } as Response);
+      fetchSpy.mockResolvedValueOnce(
+        createMockResponse({ message: 'Something went wrong' }, { ok: false })
+      );
 
       await expect(ticketApi.getAll()).rejects.toThrow('Erro na requisição');
     });
@@ -562,14 +505,8 @@ describe('ticketApi', () => {
   describe('Integration Scenarios', () => {
     it('deve fazer múltiplas chamadas independentes', async () => {
       fetchSpy
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => [mockTicket],
-        } as Response)
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => mockTicket,
-        } as Response);
+        .mockResolvedValueOnce(createMockResponse([mockTicket]))
+        .mockResolvedValueOnce(createMockResponse(mockTicket));
 
       await ticketApi.getAll();
       await ticketApi.getById('ticket-123');
@@ -581,14 +518,8 @@ describe('ticketApi', () => {
       const createdTicket = { ...mockTicket, id: 'new-ticket' };
 
       fetchSpy
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => createdTicket,
-        } as Response)
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => createdTicket,
-        } as Response);
+        .mockResolvedValueOnce(createMockResponse(createdTicket))
+        .mockResolvedValueOnce(createMockResponse(createdTicket));
 
       const created = await ticketApi.create({
         title: '[BUG] Test',
@@ -610,14 +541,8 @@ describe('ticketApi', () => {
       const updatedTicket = { ...mockTicket, status: 'resolved' as const };
 
       fetchSpy
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => updatedTicket,
-        } as Response)
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => updatedTicket,
-        } as Response);
+        .mockResolvedValueOnce(createMockResponse(updatedTicket))
+        .mockResolvedValueOnce(createMockResponse(updatedTicket));
 
       await ticketApi.update('ticket-123', { status: 'resolved' });
       const fetched = await ticketApi.getById('ticket-123');
