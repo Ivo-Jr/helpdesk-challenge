@@ -21,3 +21,5 @@ Tecnologias utilizadas:
 - Evite ao máximo duplicidade de código. Ao repetir um código, crie componentes e/ ou funções utilitárias.
 - **SEMPRE** crie pastas e arquivos de forma incremental, evitando pastas vazias e abstrações prematuras.
 - **SEMPRE** dê uma breve justificativa das declarações.
+- Não utilize cores hardcoded no projeto. Opte pelas disponíveis em @app/_styles/variables.scss. Caso não encontre, crie novas de forma que possam ser reutilizadas. 
+- Não utilize Tailwind.
