@@ -27,6 +27,16 @@ $color-error: #ef4444;
 $color-warning: #f59e0b;
 $color-info: #3b82f6;
 
+// Cores de Feedback (continuação)
+$color-error-hover: #dc2626; // Vermelho mais escuro para hover
+$color-error-bg: rgba(239, 68, 68, 0.1); // Background suave de erro
+
+// Cores de Modal/Overlay
+$color-overlay: rgba(0, 0, 0, 0.5); // Overlay escuro semi-transparente
+
+// Cores de spinner/loading
+$color-spinner-track: rgba(255, 255, 255, 0.3); // Track do spinner
+
 // Backgrounds de Badges
 $color-bg-open: #eff6ff;
 $color-bg-in-progress: #fef3c7;

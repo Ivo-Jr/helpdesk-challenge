@@ -1,0 +1,216 @@
+@import "../../_styles/variables";
+
+// Botão de exclusão
+.deleteButton {
+  padding: $spacing-sm $spacing-lg;
+  background: transparent;
+  color: $color-error;
+  border: 1px solid $color-error;
+  border-radius: $border-radius-sm;
+  font-size: $text-base;
+  font-weight: $font-medium;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: $color-error-bg;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Modal overlay (fundo escuro)
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $color-overlay;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-modal-backdrop;
+  animation: fadeIn 0.2s ease-out;
+}
+
+// Modal container
+.modal {
+  background: $color-bg-primary;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-lg;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: auto;
+  animation: slideIn 0.2s ease-out;
+}
+
+// Header do modal
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-lg;
+  border-bottom: 1px solid $color-border;
+}
+
+.modalTitle {
+  font-size: $text-xl;
+  font-weight: $font-semibold;
+  color: $color-text-primary;
+  margin: 0;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  color: $color-text-secondary;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $border-radius-sm;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: $color-bg-tertiary;
+    color: $color-text-primary;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Body do modal
+.modalBody {
+  padding: $spacing-lg;
+}
+
+.modalDescription {
+  color: $color-text-secondary;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// Footer do modal
+.modalFooter {
+  display: flex;
+  gap: $spacing-sm;
+  justify-content: flex-end;
+  padding: $spacing-lg;
+  border-top: 1px solid $color-border;
+}
+
+.cancelButton {
+  padding: $spacing-sm $spacing-lg;
+  background: transparent;
+  color: $color-text-secondary;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-sm;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: $color-bg-secondary;
+    border-color: $color-text-secondary;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.confirmButton {
+  padding: $spacing-sm $spacing-lg;
+  background: $color-error;
+  color: white;
+  border: none;
+  border-radius: $border-radius-sm;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &:hover:not(:disabled) {
+    background: $color-error-hover;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+// Mensagem de erro
+.error {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  background: $color-error-bg;
+  border: 1px solid $color-error;
+  border-radius: $border-radius-sm;
+  color: $color-error;
+  font-size: $text-sm;
+  margin-top: $spacing-md;
+}
+
+.errorIcon {
+  font-size: $text-lg;
+}
+
+// Spinner
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid $color-spinner-track;
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+// Animações
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

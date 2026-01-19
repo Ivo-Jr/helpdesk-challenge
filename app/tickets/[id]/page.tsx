@@ -7,6 +7,7 @@ import {
   CATEGORY_LABELS,
 } from "@/lib/constants";
 import { formatDate } from "@/lib/formatters";
+import { DeleteTicketButton } from "@/components/delete-ticket-button/DeleteTicketButton";
 import styles from "./page.module.scss";
 import { ticketApi } from "@/app/_lib/api";
 
@@ -44,7 +45,6 @@ export default async function TicketDetailPage({
       </div>
 
       <div className={styles.content}>
-        {/* Badges */}
         <div className={styles.badges}>
           <span className={`${styles.badge} ${styles[`badge-${ticket.status}`]}`}>
             {STATUS_LABELS[ticket.status]}
@@ -57,13 +57,11 @@ export default async function TicketDetailPage({
           </span>
         </div>
 
-        {/* Descrição */}
         <section className={styles.section}>
           <h2>Descrição</h2>
           <p className={styles.description}>{ticket.description}</p>
         </section>
 
-        {/* Informações */}
         <section className={styles.section}>
           <h2>Informações</h2>
           <dl className={styles.infoList}>
@@ -93,11 +91,11 @@ export default async function TicketDetailPage({
           </dl>
         </section>
 
-        {/* Ações */}
         <div className={styles.actions}>
           <Link href={`/tickets/${ticket.id}/edit`} className={styles.editButton}>
             Editar Ticket
           </Link>
+          <DeleteTicketButton ticketId={ticket.id} />
         </div>
       </div>
     </main>
