@@ -1,26 +1,35 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTicketStore } from "@/stores/ticket-store";
-import { useTicketMutation } from "@/hooks/use-ticket-mutation";
-import type { CreateTicketDto } from "@/types/ticket";
-import { TicketForm } from "@/components/ticket-form/TicketForm";
+import { useTicketStore } from "../_stores/ticket-store";
+import { useTicketMutation } from "../_hooks/use-ticket-mutation";
+import type { CreateTicketDto } from "../_types/ticket";
+import { TicketForm } from "../_components/ticket-form/TicketForm";
 import styles from "./page.module.scss";
 
 export default function NewTicketPage() {
   const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
   const createTicket = useTicketStore((state) => state.createTicket);
   const { mutate, isLoading, error, isSuccess } = useTicketMutation({
-    onSuccess: () => router.push("/"),
+    onSuccess: () => {
+      router.push("/");
+    },
   });
 
   const handleSubmit = async (data: CreateTicketDto) => {
-    mutate(() => createTicket(data));
+    if (isProcessing) return;
+    setIsProcessing(true);
+    await mutate(() => createTicket(data));
   };
 
   const handleCancel = () => {
+    if (isLoading || isProcessing) return;
     router.push("/");
   };
+
+  const isSubmitting = isLoading || isProcessing;
 
   return (
     <main className={styles.container}>
@@ -31,7 +40,7 @@ export default function NewTicketPage() {
 
       <TicketForm
         onSubmit={handleSubmit}
-        isSubmitting={isLoading}
+        isSubmitting={isSubmitting}
         error={error}
         success={isSuccess}
         onCancel={handleCancel}
