@@ -1,35 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ticketApi } from "@/lib/api";
+import { useTicketStore } from "@/stores/ticket-store";
+import { useTicketMutation } from "@/hooks/use-ticket-mutation";
 import type { CreateTicketDto } from "@/types/ticket";
 import { TicketForm } from "@/components/ticket-form/TicketForm";
 import styles from "./page.module.scss";
 
 export default function NewTicketPage() {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const createTicket = useTicketStore((state) => state.createTicket);
+  const { mutate, isLoading, error, isSuccess } = useTicketMutation({
+    onSuccess: () => router.push("/"),
+  });
 
   const handleSubmit = async (data: CreateTicketDto) => {
-    setError(null);
-    setSuccess(false);
-    setIsSubmitting(true);
-
-    try {
-      await ticketApi.create(data);
-      setSuccess(true);
-      
-      // Aguardar 1.5s para mostrar mensagem de sucesso antes de redirecionar
-      setTimeout(() => {
-        router.push("/");
-      }, 1500);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao criar ticket");
-      setIsSubmitting(false);
-    }
+    mutate(() => createTicket(data));
   };
 
   const handleCancel = () => {
@@ -45,9 +31,9 @@ export default function NewTicketPage() {
 
       <TicketForm
         onSubmit={handleSubmit}
-        isSubmitting={isSubmitting}
+        isSubmitting={isLoading}
         error={error}
-        success={success}
+        success={isSuccess}
         onCancel={handleCancel}
       />
     </main>

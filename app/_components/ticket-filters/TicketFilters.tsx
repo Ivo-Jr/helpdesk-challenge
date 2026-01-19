@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
+import { useTicketStore } from "@/stores/ticket-store";
 import { STATUS_LABELS } from "@/lib/constants";
 import styles from "./TicketFilters.module.scss";
 
@@ -9,8 +10,9 @@ export function TicketFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const setFilters = useTicketStore((state) => state.setFilters);
+  const clearFiltersStore = useTicketStore((state) => state.clearFilters);
 
-  // Estados locais para inputs
   const [status, setStatus] = useState(searchParams.get("status") || "");
   const [search, setSearch] = useState(searchParams.get("search") || "");
 
@@ -19,6 +21,8 @@ export function TicketFilters() {
 
     if (status) params.set("status", status);
     if (search) params.set("search", search);
+
+    setFilters({ status: status || undefined, search: search || undefined });
 
     const queryString = params.toString();
     const newUrl = queryString ? `/?${queryString}` : "/";
@@ -31,6 +35,8 @@ export function TicketFilters() {
   const handleClearFilters = () => {
     setStatus("");
     setSearch("");
+    clearFiltersStore();
+    
     startTransition(() => {
       router.push("/");
     });

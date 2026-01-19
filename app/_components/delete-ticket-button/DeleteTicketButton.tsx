@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ticketApi } from "@/lib/api";
+import { useTicketStore } from "@/stores/ticket-store";
+import { useTicketMutation } from "@/hooks/use-ticket-mutation";
 import styles from "./DeleteTicketButton.module.scss";
 
 interface DeleteTicketButtonProps {
@@ -12,40 +13,45 @@ interface DeleteTicketButtonProps {
 export function DeleteTicketButton({ ticketId }: DeleteTicketButtonProps) {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleDelete = async () => {
-    setError(null);
-    setIsDeleting(true);
-
-    try {
-      await ticketApi.delete(ticketId);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const deleteTicketAsync = useTicketStore((state) => state.deleteTicketAsync);
+  const { mutate, isLoading: isDeleting, error, reset } = useTicketMutation({
+    onSuccess: () => {
       setShowModal(false);
       router.push("/?deleted=true");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao excluir ticket");
-      setIsDeleting(false);
-    }
+    },
+  });
+
+  const handleDelete = () => {
+    if (isProcessing) return;
+    setIsProcessing(true);
+    mutate(() => deleteTicketAsync(ticketId));
   };
 
   const handleCancel = () => {
+    if (isDeleting || isProcessing) return;
     setShowModal(false);
-    setError(null);
+    reset();
   };
+
+  const isDisabled = isDeleting || isProcessing;
 
   return (
     <>
       <button
         onClick={() => setShowModal(true)}
         className={styles.deleteButton}
-        disabled={isDeleting}
+        disabled={isDisabled}
       >
         Excluir Ticket
       </button>
 
       {showModal && (
-        <div className={styles.modalOverlay} onClick={handleCancel}>
+        <div 
+          className={styles.modalOverlay} 
+          onClick={handleCancel}
+          style={{ pointerEvents: isDisabled ? 'none' : 'auto' }}
+        >
           <div
             className={styles.modal}
             onClick={(e) => e.stopPropagation()}
@@ -55,7 +61,7 @@ export function DeleteTicketButton({ ticketId }: DeleteTicketButtonProps) {
               <button
                 onClick={handleCancel}
                 className={styles.closeButton}
-                disabled={isDeleting}
+                disabled={isDisabled}
                 aria-label="Fechar"
               >
                 ×
@@ -79,16 +85,16 @@ export function DeleteTicketButton({ ticketId }: DeleteTicketButtonProps) {
               <button
                 onClick={handleCancel}
                 className={styles.cancelButton}
-                disabled={isDeleting}
+                disabled={isDisabled}
               >
                 Cancelar
               </button>
               <button
                 onClick={handleDelete}
                 className={styles.confirmButton}
-                disabled={isDeleting}
+                disabled={isDisabled}
               >
-                {isDeleting ? (
+                {isDisabled ? (
                   <>
                     <span className={styles.spinner}></span>
                     Excluindo...
@@ -104,4 +110,3 @@ export function DeleteTicketButton({ ticketId }: DeleteTicketButtonProps) {
     </>
   );
 }
-
