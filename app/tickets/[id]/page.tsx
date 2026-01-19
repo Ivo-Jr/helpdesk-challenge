@@ -8,27 +8,7 @@ import {
 } from "@/lib/constants";
 import { formatDate } from "@/lib/formatters";
 import styles from "./page.module.scss";
-
-// Função para buscar ticket por ID
-async function getTicket(id: string): Promise<Ticket | null> {
-  try {
-    const res = await fetch(`http://localhost:3000/api/tickets/${id}`, {
-      cache: "no-store", // SSR - sempre buscar dados frescos
-    });
-
-    if (!res.ok) {
-      if (res.status === 404) {
-        return null;
-      }
-      throw new Error("Falha ao buscar ticket");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error("Erro ao buscar ticket:", error);
-    return null;
-  }
-}
+import { ticketApi } from "@/app/_lib/api";
 
 type Params = Promise<{ id: string }>;
 
@@ -38,7 +18,17 @@ export default async function TicketDetailPage({
   params: Params;
 }) {
   const { id } = await params;
-  const ticket = await getTicket(id);
+  let ticket: Ticket | null = null;
+
+  try {
+   ticket = await ticketApi.getById(id, {
+      useAbsolute: true,
+      cache: "no-store",
+    });
+  } catch (error) {
+    console.error("Erro ao buscar ticket:", error);
+    notFound();
+  }
 
   if (!ticket) {
     notFound();

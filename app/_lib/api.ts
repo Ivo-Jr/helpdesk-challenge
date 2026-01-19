@@ -3,8 +3,18 @@ import type {
   CreateTicketDto,
   UpdateTicketDto,
 } from "../_types/ticket";
+import { getBaseUrl } from "./config";
 
-const API_BASE_URL = "/api/tickets";
+/**
+ * Constrói URL completa para requisições
+ * @param useAbsolute - Se true, retorna URL absoluta (necessário em Server Components)
+ */
+function getApiUrl(useAbsolute = false): string {
+  if (useAbsolute) {
+    return `${getBaseUrl()}/api/tickets`;
+  }
+  return "/api/tickets";
+}
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
@@ -17,28 +27,59 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export const ticketApi = {
-  async getAll(filters?: {
-    status?: string;
-    search?: string;
-  }): Promise<Ticket[]> {
+  /**
+   * Busca todos os tickets com filtros opcionais
+   * @param filters - Filtros de status e busca
+   * @param options - Opções de cache do Next.js
+   */
+  async getAll(
+    filters?: {
+      status?: string;
+      search?: string;
+    },
+    options?: {
+      useAbsolute?: boolean;
+      cache?: RequestCache;
+      next?: NextFetchRequestConfig;
+    }
+  ): Promise<Ticket[]> {
     const params = new URLSearchParams();
     if (filters?.status) params.append("status", filters.status);
     if (filters?.search) params.append("search", filters.search);
 
-    const url = params.toString() ? `${API_BASE_URL}?${params}` : API_BASE_URL;
-    const response = await fetch(url, { cache: "no-store" });
+    const baseUrl = getApiUrl(options?.useAbsolute);
+    const url = params.toString() ? `${baseUrl}?${params}` : baseUrl;
+
+    const response = await fetch(url, {
+      cache: options?.cache || "no-store",
+      next: options?.next,
+    });
     return handleResponse<Ticket[]>(response);
   },
 
-  async getById(id: string): Promise<Ticket> {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
-      cache: "no-store",
+  /**
+   * Busca um ticket por ID
+   * @param id - ID do ticket
+   * @param options - Opções de cache do Next.js
+   */
+  async getById(
+    id: string,
+    options?: {
+      useAbsolute?: boolean;
+      cache?: RequestCache;
+      next?: NextFetchRequestConfig;
+    }
+  ): Promise<Ticket> {
+    const baseUrl = getApiUrl(options?.useAbsolute);
+    const response = await fetch(`${baseUrl}/${id}`, {
+      cache: options?.cache || "no-store",
+      next: options?.next,
     });
     return handleResponse<Ticket>(response);
   },
 
   async create(data: CreateTicketDto): Promise<Ticket> {
-    const response = await fetch(API_BASE_URL, {
+    const response = await fetch(getApiUrl(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -47,7 +88,7 @@ export const ticketApi = {
   },
 
   async update(id: string, data: UpdateTicketDto): Promise<Ticket> {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    const response = await fetch(`${getApiUrl()}/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -56,7 +97,7 @@ export const ticketApi = {
   },
 
   async delete(id: string): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    const response = await fetch(`${getApiUrl()}/${id}`, {
       method: "DELETE",
     });
     if (!response.ok) {

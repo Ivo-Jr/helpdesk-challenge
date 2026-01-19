@@ -1,41 +1,11 @@
-import type { Ticket } from "@/types/ticket";
 import styles from "./page.module.scss";
 import { TicketCard } from "@/components/ticket-card/TicketCard";
 import { TicketFilters } from "@/components/ticket-filters/TicketFilters";
+import { ticketApi } from "./_lib/api";
 
 // ISR: Revalidar a cada 60 segundos
 export const revalidate = 60;
 
-// Função para buscar tickets do servidor
-async function getTickets(filters?: {
-  status?: string;
-  search?: string;
-}): Promise<Ticket[]> {
-  try {
-    const params = new URLSearchParams();
-    if (filters?.status) params.append("status", filters.status);
-    if (filters?.search) params.append("search", filters.search);
-
-    const url = params.toString()
-      ? `http://localhost:3000/api/tickets?${params}`
-      : "http://localhost:3000/api/tickets";
-
-    const res = await fetch(url, {
-      next: { revalidate: 60 },
-    });
-
-    if (!res.ok) {
-      throw new Error("Falha ao buscar tickets");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error("Erro ao buscar tickets:", error);
-    throw error;
-  }
-}
-
-// Tipagem do searchParams (Next.js 16 é Promise)
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 export default async function HomePage({
@@ -50,7 +20,10 @@ export default async function HomePage({
     search: typeof params.search === "string" ? params.search : undefined,
   };
 
-  const tickets = await getTickets(filters);
+  const tickets = await ticketApi.getAll(filters, {
+    useAbsolute: true,
+    next: { revalidate: 60 },
+  });
 
   return (
     <main className={styles.container}>
@@ -59,7 +32,6 @@ export default async function HomePage({
         <p>Gerencie seus tickets de suporte</p>
       </div>
 
-      {/* Componente de filtros */}
       <TicketFilters />
 
       {tickets.length === 0 ? (

@@ -34,7 +34,6 @@ export const ticketSchema = z
   })
   .refine(
     (data) => {
-      // Validação condicional 1: billing não aceita domínios públicos
       if (data.category === "billing") {
         const domain = data.email.split("@")[1];
         return !PUBLIC_EMAIL_DOMAINS.includes(domain);
@@ -48,7 +47,6 @@ export const ticketSchema = z
   )
   .refine(
     (data) => {
-      // Validação condicional 2: high priority exige descrição longa
       if (data.priority === "high") {
         return data.description.length >= 60;
       }
@@ -62,7 +60,6 @@ export const ticketSchema = z
   )
   .refine(
     (data) => {
-      // Validação condicional 3: bug exige [BUG] no título
       if (data.category === "bug") {
         return data.title.startsWith("[BUG]");
       }
