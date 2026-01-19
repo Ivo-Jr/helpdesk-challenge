@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "./page.module.scss";
 import { TicketCard } from "@/components/ticket-card/TicketCard";
 import { TicketFilters } from "@/components/ticket-filters/TicketFilters";
@@ -28,8 +29,16 @@ export default async function HomePage({
   return (
     <main className={styles.container}>
       <div className={styles.header}>
-        <h1>Tickets de Suporte</h1>
-        <p>Gerencie seus tickets de suporte</p>
+        <div className={styles.headerContent}>
+          <div className={styles.headerText}>
+            <h1>Tickets de Suporte</h1>
+            <p>Gerencie seus tickets de suporte</p>
+          </div>
+          <Link href="/new" className={styles.newTicketButton}>
+            <span className={styles.buttonIcon}>+</span>
+            Novo Ticket
+          </Link>
+        </div>
       </div>
 
       <TicketFilters />

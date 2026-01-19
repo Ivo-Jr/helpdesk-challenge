@@ -12,6 +12,23 @@
   margin-bottom: $spacing-xl;
   border-bottom: 1px solid $color-border;
   padding-bottom: $spacing-lg;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-lg;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-md;
+  }
+}
+
+.headerText {
+  flex: 1;
 
   h1 {
     font-size: $text-3xl;
@@ -25,6 +42,46 @@
     color: $color-text-secondary;
     font-size: $text-base;
   }
+}
+
+.newTicketButton {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-lg;
+  background: $color-primary;
+  color: white;
+  border: none;
+  border-radius: $border-radius-md;
+  font-size: $text-base;
+  font-weight: $font-semibold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  box-shadow: $shadow-sm;
+
+  &:hover {
+    background: $color-primary-hover;
+    box-shadow: $shadow-md;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: $shadow-sm;
+  }
+
+  @media (max-width: 640px) {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.buttonIcon {
+  font-size: $text-xl;
+  font-weight: $font-bold;
+  line-height: 1;
 }
 
 .ticketList {
